@@ -166,16 +166,22 @@ model Rating {
 
 enum RewardType {
   COUPON
+  FOOD_BEV
+  FOOD_DELIVERY
+  ENTERTAINMENT
   VOUCHER
 }
 
 model Reward {
   id Int @id @default(autoincrement())
 
-  rewardType  RewardType
+  rewardType RewardType
+
   rewardName  String
   rewardDesc  String
   rewardValue Float
+
+  imageLink String?
 
   like Int @default(0)
 
