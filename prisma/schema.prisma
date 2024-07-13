@@ -74,8 +74,8 @@ model CarModel {
 }
 
 model MobilCenter {
-  id      Int    @id @default(autoincrement())
-  lineUid String @unique
+  id      Int     @id @default(autoincrement())
+  lineUid String? @unique
 
   name    String
   address String
@@ -83,8 +83,8 @@ model MobilCenter {
   latitude  Float
   longitude Float
 
-  openingHours DateTime
-  closingHours DateTime
+  openingTime Int
+  closingTime Int
 
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt

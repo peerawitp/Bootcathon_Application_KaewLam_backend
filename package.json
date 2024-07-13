@@ -4,7 +4,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "seed-car": "bun run prisma/seeders/car.js"
+    "seed-car": "bun run prisma/seeders/car.js",
+    "seed-center": "bun run prisma/seeders/center.js"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.0.4",

@@ -1,0 +1,92 @@
+{
+  "Locations": [
+    {
+      "LocationID": "202009330",
+      "LocationName": "เบนซ์สุขุมวิท 47",
+      "DisplayName": "เบนซ์สุขุมวิท 47",
+      "Latitude": 13.72754,
+      "Longitude": 100.574089,
+      "AddressLine1": "837/1 ถ.สุขุมวิท (ระหว่างซอย 45-47)",
+      "AddressLine2": "คลองตันเหนือ",
+      "City": "เขตวัฒนา",
+      "StateProvince": "กรุงเทพมหานคร",
+      "PostalCode": "10110",
+      "Telephone": "086-8463088",
+      "Country": "TH",
+      "HoursOfOperation24": [
+        {
+          "day": "",
+          "hours": "8:00 - 17:30"
+        }
+      ],
+      "Franchise": "Mobil 1 Center",
+      "Category": "Service Center"
+    },
+    {
+      "LocationID": "202009323",
+      "LocationName": "บริษัท เอ เอ็ม อาร์ ออโต้พาร์ทแอนด์ เซอร์วิส จำกัด",
+      "DisplayName": "บริษัท เอ เอ็ม อาร์ ออโต้พาร์ทแอนด์ เซอร์วิส จำกัด",
+      "Latitude": 13.82443,
+      "Longitude": 100.572807,
+      "AddressLine1": "60 ถ.รัชดาภิเษก ซ.เฉลิมสุข",
+      "AddressLine2": "จันทรเกษม",
+      "City": "เขตจตุจักร",
+      "StateProvince": "กรุงเทพมหานคร",
+      "PostalCode": "10900",
+      "Telephone": "083-0962034",
+      "Country": "TH",
+      "HoursOfOperation24": [
+        {
+          "day": "",
+          "hours": "8:00 - 18:00"
+        }
+      ],
+      "Franchise": "Mobil 1 Center",
+      "Category": "Service Center"
+    },
+    {
+      "LocationID": "202009460",
+      "LocationName": "บริษัท อมร แคร์ จำกัด",
+      "DisplayName": "บริษัท อมร แคร์ จำกัด",
+      "Latitude": 13.82585,
+      "Longitude": 100.577515,
+      "AddressLine1": "60 ถ.รัชดาภิเษก ซ.เฉลิมสุข",
+      "AddressLine2": "จันทรเกษม",
+      "City": "เขตจตุจักร",
+      "StateProvince": "กรุงเทพมหานคร",
+      "PostalCode": "10900",
+      "Telephone": "02-939-0055",
+      "Country": "TH",
+      "HoursOfOperation24": [
+        {
+          "day": "",
+          "hours": "8:00 - 17:00"
+        }
+      ],
+      "Franchise": "Mobil 1 Center",
+      "Category": "Service Center"
+    },
+    {
+      "LocationID": "202009471",
+      "LocationName": "บริษัท เนตร ออโต้ เซอร์วิส จำกัด",
+      "DisplayName": "บริษัท เนตร ออโต้ เซอร์วิส จำกัด",
+      "Latitude": 13.813306,
+      "Longitude": 100.594666,
+      "AddressLine1": "19/191 ซ.ลาดพร้าว-วังหิน7",
+      "AddressLine2": "ลาดพร้าว",
+      "City": "เขตลาดพร้าว",
+      "StateProvince": "กรุงเทพมหานคร",
+      "PostalCode": "10230",
+      "Telephone": "0-2931-7183",
+      "Country": "TH",
+      "HoursOfOperation24": [
+        {
+          "day": "",
+          "hours": "8:00 - 17:00"
+        }
+      ],
+      "Franchise": "Workshop",
+      "Category": "Service Center"
+    }
+  ]
+}
