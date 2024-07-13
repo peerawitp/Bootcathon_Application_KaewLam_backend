@@ -1,0 +1,200 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CarType {
+  SEDAN
+  HATCHBACK
+  SUV
+  PICKUP_TRUCK
+  VAN
+  LIGHT_COMMERCIAL_VEHICLE
+  MOTORCYCLE
+  ELECTRIC_VEHICLE
+}
+
+enum OilViscosity {
+  V0W20
+  V5W30
+  V10W30
+  V10W40
+  V15W40
+  V20W50
+}
+
+model User {
+  id          String  @id @default(cuid())
+  lineUid     String  @unique
+  mobilePhone String?
+
+  point Int @default(0)
+
+  UserCar        UserCar[]
+  Booking        Booking[]
+  RewardInstance RewardInstance[]
+}
+
+model UserCar {
+  id         Int    @id @default(autoincrement())
+  userId     String
+  carModelId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+  CarModel  CarModel @relation(fields: [carModelId], references: [id])
+}
+
+model CarBrand {
+  name String     @id @unique
+  cars CarModel[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CarModel {
+  id           Int          @id @default(autoincrement())
+  model        String
+  year         Int
+  carType      CarType
+  oilViscosity OilViscosity
+
+  brandName String
+  brand     CarBrand @relation(fields: [brandName], references: [name])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  UserCar   UserCar[]
+}
+
+model MobilCenter {
+  id      Int    @id @default(autoincrement())
+  lineUid String @unique
+
+  name    String
+  address String
+
+  latitude  Float
+  longitude Float
+
+  openingHours DateTime
+  closingHours DateTime
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Booking    Booking[]
+  Technician Technician[]
+}
+
+model Technician {
+  id            Int @id @default(autoincrement())
+  mobilCenterId Int
+
+  lineUid     String? @unique
+  name        String
+  mobilePhone String?
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  MobilCenter MobilCenter @relation(fields: [mobilCenterId], references: [id])
+}
+
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  description  String
+  oilViscosity OilViscosity
+  liquidVolume Float
+  price        Float
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Booking   Booking[]
+}
+
+enum BookingState {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  DONE
+}
+
+model Booking {
+  id Int @id @default(autoincrement())
+
+  userId        String
+  mobilCenterId Int
+  productId     Int
+
+  customerAddress  String
+  customerLocation String?
+
+  bookingState BookingState
+  bookingDate  DateTime
+
+  isRated Boolean @default(false)
+
+  serviceCost    Float
+  additionalNote String?
+  additionalCost Float?
+
+  User        User        @relation(fields: [userId], references: [id])
+  MobilCenter MobilCenter @relation(fields: [mobilCenterId], references: [id])
+  Product     Product     @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Rating    Rating[]
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  bookingId Int
+  rating    Int
+  comment   String?
+  Booking   Booking  @relation(fields: [bookingId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum RewardType {
+  COUPON
+  VOUCHER
+}
+
+model Reward {
+  id Int @id @default(autoincrement())
+
+  rewardType  RewardType
+  rewardName  String
+  rewardDesc  String
+  rewardValue Float
+
+  like Int @default(0)
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  RewardInstance RewardInstance[]
+}
+
+model RewardInstance {
+  id Int @id @default(autoincrement())
+
+  rewardId Int
+  code     String  @unique
+  isUsed   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Reward    Reward   @relation(fields: [rewardId], references: [id])
+
+  User         User?   @relation(fields: [usedByUserId], references: [id])
+  usedByUserId String?
+}
