@@ -51,7 +51,7 @@ async function main() {
     }
   }
 
-  console.log("Reward data seeded");
+  console.log("Seeding RewardData completed!");
   process.exit(0);
 }
 
