@@ -1,12 +1,12 @@
 import { Elysia } from "elysia";
-import { isAuthenticated } from "../middlewares/isAuthenticated";
+import { isLiffAuthenticated } from "../middlewares/isLiffAuthenticated";
 
 import { db } from "../db";
 
 export const customer = async (app: Elysia) =>
   app.group("/customer", (app) =>
     app
-      .use(isAuthenticated)
+      .use(isLiffAuthenticated)
       .get("/profile", async ({ user }) => {
         const data = await db.user.findUnique({
           where: { lineUid: user.sub },

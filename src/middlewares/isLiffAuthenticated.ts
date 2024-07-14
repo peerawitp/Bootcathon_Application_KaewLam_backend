@@ -3,7 +3,7 @@ import { Elysia } from "elysia";
 import { isTokenExpired } from "../utils/jwt";
 import { verifyIdToken } from "../services/line";
 
-export const isAuthenticated = (app: Elysia) =>
+export const isLiffAuthenticated = (app: Elysia) =>
   app.derive(async function handler({ request: { headers } }) {
     const authorization = headers.get("authorization");
     if (!authorization) throw new Error("UNAUTHORIZED");
