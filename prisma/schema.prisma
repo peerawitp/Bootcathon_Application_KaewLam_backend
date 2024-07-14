@@ -29,9 +29,13 @@ enum OilViscosity {
 }
 
 model User {
-  id          String  @id @default(cuid())
-  lineUid     String  @unique
+  id      String @id @default(cuid())
+  lineUid String @unique
+
+  firstName   String?
+  lastName    String?
   mobilePhone String?
+  email       String?
 
   point Int @default(0)
 
@@ -44,6 +48,7 @@ model UserCar {
   id         Int    @id @default(autoincrement())
   userId     String
   carModelId Int
+  carYear    Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
