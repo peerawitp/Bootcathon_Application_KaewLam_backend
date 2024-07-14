@@ -8,7 +8,11 @@ import { center } from "./controllers/center";
 import { car } from "./controllers/car";
 
 const app = new Elysia()
-  .use(cors())
+  .use(
+    cors({
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  )
   .use(
     swagger({
       documentation: {
