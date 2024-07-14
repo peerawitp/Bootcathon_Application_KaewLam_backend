@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      LINE_CLIENT_ID: ${LINE_CLIENT_ID}
+      DATABASE_URL: ${DATABASE_URL}
+    restart: on-failure
+    ports:
+      - ${PORT}:3000
