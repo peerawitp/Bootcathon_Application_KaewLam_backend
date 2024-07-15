@@ -6,6 +6,8 @@ services:
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       LINE_CLIENT_ID: ${LINE_CLIENT_ID}
+      LINE_CHANNEL_ACCESS_TOKEN: ${LINE_CHANNEL_ACCESS_TOKEN}
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
       DATABASE_URL: ${DATABASE_URL}
     restart: on-failure
     ports:
