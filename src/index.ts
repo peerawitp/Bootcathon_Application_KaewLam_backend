@@ -7,6 +7,10 @@ import { reward } from "./controllers/reward";
 import { center } from "./controllers/center";
 import { car } from "./controllers/car";
 
+import { t } from "elysia";
+import { handleEvent } from "./services/line";
+import { LINEMessageRequestDTO } from "./dtos/LINEMessageRequestDTO";
+
 const app = new Elysia()
   .use(
     cors({
@@ -28,6 +32,18 @@ const app = new Elysia()
   .use(center)
   .use(car)
   .get("/", () => "Hello Mobil 🏎️...")
+  .post(
+    "/callback",
+    async ({ body }) => {
+      if (!body.events.length) {
+        return {};
+      }
+      return await handleEvent(body.events[0]);
+    },
+    {
+      body: LINEMessageRequestDTO,
+    },
+  )
   .ws("/chatbot", {
     message(ws, message) {
       ws.send(message);
