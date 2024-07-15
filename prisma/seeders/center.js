@@ -8,6 +8,9 @@ async function main() {
   );
 
   for (const location of data.Locations) {
+    if (!location.HoursOfOperation24[0]) {
+      continue;
+    }
     const [openingHours, closingHours] =
       location.HoursOfOperation24[0].hours.split(" - ");
 
