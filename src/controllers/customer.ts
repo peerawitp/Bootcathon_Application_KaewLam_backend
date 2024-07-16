@@ -49,6 +49,17 @@ export const customer = async (app: Elysia) =>
           response: CustomerStatusDTO,
         },
       )
+      .get("/car", async ({ user }) => {
+        const data = await db.user.findUnique({
+          where: { lineUid: user.sub },
+        });
+        if (!data) throw new Error("User didn't initialize liff");
+        const userCar = await db.userCar.findFirst({
+          where: { userId: data.id },
+        });
+        if (!userCar) throw new Error("Car not found");
+        return userCar;
+      })
       .post(
         "/register",
         async ({ user, body }) => {
