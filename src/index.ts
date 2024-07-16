@@ -6,8 +6,8 @@ import { customer } from "./controllers/customer";
 import { reward } from "./controllers/reward";
 import { center } from "./controllers/center";
 import { car } from "./controllers/car";
+import { product } from "./controllers/product";
 
-import { t } from "elysia";
 import { handleEvent } from "./services/line";
 import { LINEMessageRequestDTO } from "./dtos/LINEMessageRequestDTO";
 
@@ -31,6 +31,7 @@ const app = new Elysia()
   .use(reward)
   .use(center)
   .use(car)
+  .use(product)
   .get("/", () => "Hello Mobil 🏎️...")
   .post(
     "/callback",
