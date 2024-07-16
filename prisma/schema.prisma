@@ -21,7 +21,11 @@ enum CarType {
 
 enum OilViscosity {
   V0W20
+  V0W30
+  V0W40
   V5W30
+  V5W40
+  V5W50
   V10W30
   V10W40
   V15W40
@@ -50,10 +54,11 @@ model UserCar {
   carModelId Int
   carYear    Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
-  CarModel  CarModel @relation(fields: [carModelId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  User      User      @relation(fields: [userId], references: [id])
+  CarModel  CarModel  @relation(fields: [carModelId], references: [id])
+  Booking   Booking[]
 }
 
 model CarBrand {
@@ -138,6 +143,7 @@ model Booking {
   userId        String
   mobilCenterId Int
   productId     Int
+  userCarId     Int
 
   customerAddress  String
   customerLocation String?
@@ -154,6 +160,7 @@ model Booking {
   User        User        @relation(fields: [userId], references: [id])
   MobilCenter MobilCenter @relation(fields: [mobilCenterId], references: [id])
   Product     Product     @relation(fields: [productId], references: [id])
+  UserCar     UserCar     @relation(fields: [userCarId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
