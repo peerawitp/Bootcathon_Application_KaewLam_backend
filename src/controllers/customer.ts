@@ -156,7 +156,22 @@ export const customer = async (app: Elysia) =>
         {
           body: CustomerBookingBodyDTO,
         },
-      ),
+      )
+      .get("/booking-history", async ({ user }) => {
+        const data = await db.user.findUnique({
+          where: { lineUid: user.sub },
+        });
+        if (!data) throw new Error("User didn't initialize liff");
+        const booking = await db.booking.findMany({
+          where: { userId: data.id },
+          include: {
+            MobilCenter: true,
+            Product: true,
+            UserCar: true,
+          },
+        });
+        return booking;
+      }),
   );
 
 export default customer;
