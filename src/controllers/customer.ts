@@ -7,6 +7,7 @@ import { CustomerStatusDTO } from "../dtos/CustomerStatusDTO";
 import { CustomerCarRegisterBodyDTO } from "../dtos/CustomerCarRegisterBodyDTO";
 import { CustomerBookingBodyDTO } from "../dtos/CustomerBookingBodyDTO";
 import { serviceCostCalculation } from "../utils/location";
+import { pushMessageToBackOffice } from "../services/line";
 
 export const customer = async (app: Elysia) =>
   app.group("/customer", (app) =>
@@ -147,9 +148,54 @@ export const customer = async (app: Elysia) =>
                 },
               ),
             },
+            include: {
+              MobilCenter: true,
+              Product: true,
+              UserCar: {
+                include: {
+                  CarModel: true,
+                },
+              },
+            },
           });
 
           if (!booking) throw new Error("Failed to create booking");
+
+          console.log(
+            booking.id,
+            booking.UserCar.CarModel.brandName,
+            booking.UserCar.CarModel.model,
+            new Date(booking.bookingDate).toLocaleDateString("th-TH", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+            new Date(booking.bookingDate).toLocaleTimeString("th-TH", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            booking.customerAddress,
+          );
+          const centerAdminLineUID = center.lineUid as string;
+          if (centerAdminLineUID) {
+            const sendMsg = await pushMessageToBackOffice(
+              centerAdminLineUID,
+              booking.id,
+              booking.UserCar.CarModel.brandName,
+              booking.UserCar.CarModel.model,
+              new Date(booking.bookingDate).toLocaleDateString("th-TH", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }),
+              new Date(booking.bookingDate).toLocaleTimeString("th-TH", {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              booking.customerAddress,
+            );
+            if (!sendMsg) console.error("Failed to send message to backoffice");
+          }
 
           return booking;
         },

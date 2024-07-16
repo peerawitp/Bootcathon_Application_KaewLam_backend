@@ -8,7 +8,7 @@ import { center } from "./controllers/center";
 import { car } from "./controllers/car";
 import { product } from "./controllers/product";
 
-import { handleEvent } from "./services/line";
+import { handleEvent, handleEventBO } from "./services/line";
 import { LINEMessageRequestDTO } from "./dtos/LINEMessageRequestDTO";
 
 const app = new Elysia()
@@ -40,6 +40,19 @@ const app = new Elysia()
         return {};
       }
       return await handleEvent(body.events[0]);
+    },
+    {
+      body: LINEMessageRequestDTO,
+    },
+  )
+  .post(
+    "/callback-bo",
+    async ({ body }) => {
+      console.log(body);
+      if (!body.events.length) {
+        return {};
+      }
+      return await handleEventBO(body.events[0]);
     },
     {
       body: LINEMessageRequestDTO,
