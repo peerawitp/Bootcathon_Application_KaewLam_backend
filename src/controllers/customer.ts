@@ -143,7 +143,7 @@ export const customer = async (app: Elysia) =>
                 [center.latitude, center.longitude],
                 {
                   latitude: body.customerAddress.latitude,
-                  longitude: body.customerAddress.longtitude,
+                  longitude: body.customerAddress.longitude,
                 },
               ),
             },

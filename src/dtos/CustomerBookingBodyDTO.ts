@@ -6,7 +6,7 @@ export const CustomerBookingBodyDTO = t.Object({
   customerAddress: t.Object({
     address: t.String(),
     latitude: t.Number(),
-    longtitude: t.Number(),
+    longitude: t.Number(),
   }),
   customerCarId: t.Number(),
   customerLocation: t.Optional(t.String()),
