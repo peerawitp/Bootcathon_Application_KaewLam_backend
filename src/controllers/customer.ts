@@ -54,7 +54,7 @@ export const customer = async (app: Elysia) =>
           where: { lineUid: user.sub },
         });
         if (!data) throw new Error("User didn't initialize liff");
-        const userCar = await db.userCar.findFirst({
+        const userCar = await db.userCar.findMany({
           where: { userId: data.id },
         });
         if (!userCar) throw new Error("Car not found");
