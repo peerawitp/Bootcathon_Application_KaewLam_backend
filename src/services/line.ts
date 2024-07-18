@@ -1,5 +1,6 @@
 import { db } from "../db";
 import { removeMarkdown } from "../utils/markdown";
+import { currencyFormat } from "../utils/price";
 import { runGemini } from "./gemini";
 
 export const verifyIdToken = async (idToken: string) => {
@@ -149,6 +150,55 @@ export async function handleEventBO(event: any) {
         }),
       },
     );
+
+    const user = await db.user.findUnique({
+      where: { id: booking.userId },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const center = await db.mobilCenter.findUnique({
+      where: { id: booking.mobilCenterId },
+    });
+
+    if (!center) throw new Error("Center not found");
+
+    const product = await db.product.findUnique({
+      where: { id: booking.productId },
+    });
+
+    if (!product) throw new Error("Product not found");
+
+    const sendConfirmedMessage = await pushConfirmedMessageToCustomer(
+      user.lineUid,
+      center.name,
+      center.address,
+      new Date(booking.bookingDate).toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      new Date(booking.bookingDate).toLocaleTimeString("th-TH", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      product.name,
+      "~ " +
+        currencyFormat(product.priceRange[0]!) +
+        " - " +
+        currencyFormat(product.priceRange[1]!),
+      currencyFormat(booking.serviceCost),
+      "~ " +
+        currencyFormat(product.priceRange[0]! + booking.serviceCost) +
+        " - " +
+        currencyFormat(product.priceRange[1]! + booking.serviceCost),
+    );
+
+    if (!sendConfirmedMessage)
+      throw new Error("Failed to send confirmed message");
+
+    console.log("sendConfirmedMessage", sendConfirmedMessage);
+
     console.log(confirm);
     message = "ยืนยันการจอง OrderId: " + orderId + " เรียบร้อยแล้ว 🎉";
   } else {
@@ -419,6 +469,198 @@ export async function pushMessageToBackOffice(
                 },
               ],
               flex: 0,
+            },
+          },
+        },
+      ],
+    }),
+  };
+  const res = await fetch("https://api.line.me/v2/bot/message/push", options);
+  if (res.status !== 200) {
+    console.error(res.statusText);
+  }
+  console.log(res);
+  return res;
+}
+
+export async function pushConfirmedMessageToCustomer(
+  destinationUID: string,
+  centerName: string,
+  centerAddress: string,
+  bookingDate: string,
+  bookingTime: string,
+  productName: string,
+  productPrice: string,
+  servicePrice: string,
+  totalPrice: string,
+) {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+    },
+    body: JSON.stringify({
+      to: destinationUID,
+      messages: [
+        {
+          type: "flex",
+          altText: "การแจ้งเตือนใหม่",
+          contents: {
+            type: "bubble",
+            body: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "text",
+                  text: "CONFIRMED",
+                  weight: "bold",
+                  color: "#1DB446",
+                  size: "sm",
+                },
+                {
+                  type: "text",
+                  text: centerName,
+                  weight: "bold",
+                  size: "lg",
+                  margin: "md",
+                },
+                {
+                  type: "text",
+                  text: centerAddress,
+                  size: "xxs",
+                  color: "#aaaaaa",
+                  wrap: true,
+                },
+                {
+                  type: "box",
+                  layout: "baseline",
+                  contents: [
+                    {
+                      type: "text",
+                      color: "#aaaaaa",
+                      size: "sm",
+                      flex: 3,
+                      text: "วันที่",
+                    },
+                    {
+                      type: "text",
+                      text: bookingDate,
+                      wrap: true,
+                      color: "#666666",
+                      size: "sm",
+                      flex: 0,
+                    },
+                  ],
+                  spacing: "xl",
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "baseline",
+                  contents: [
+                    {
+                      type: "text",
+                      color: "#aaaaaa",
+                      size: "sm",
+                      flex: 3,
+                      text: "เวลา",
+                    },
+                    {
+                      type: "text",
+                      text: bookingTime,
+                      wrap: true,
+                      color: "#666666",
+                      size: "sm",
+                      flex: 0,
+                    },
+                  ],
+                  spacing: "xl",
+                  margin: "lg",
+                },
+                {
+                  type: "separator",
+                  margin: "xxl",
+                },
+                {
+                  type: "box",
+                  layout: "vertical",
+                  margin: "xxl",
+                  spacing: "sm",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "horizontal",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ค่าผลิตภัณฑ์",
+                          size: "xs",
+                          color: "#555555",
+                          flex: 0,
+                        },
+                        {
+                          type: "text",
+                          text: productPrice,
+                          size: "sm",
+                          color: "#111111",
+                          align: "end",
+                        },
+                      ],
+                    },
+                    {
+                      type: "box",
+                      layout: "horizontal",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ค่าบริการ",
+                          size: "xs",
+                          color: "#555555",
+                          flex: 0,
+                        },
+                        {
+                          type: "text",
+                          text: servicePrice,
+                          size: "sm",
+                          color: "#111111",
+                          align: "end",
+                        },
+                      ],
+                    },
+                    {
+                      type: "separator",
+                      margin: "xxl",
+                    },
+                    {
+                      type: "box",
+                      layout: "horizontal",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "TOTAL",
+                          size: "sm",
+                          color: "#555555",
+                        },
+                        {
+                          type: "text",
+                          text: totalPrice,
+                          size: "sm",
+                          color: "#111111",
+                          align: "end",
+                        },
+                      ],
+                      margin: "md",
+                    },
+                  ],
+                },
+              ],
+            },
+            styles: {
+              footer: {
+                separator: true,
+              },
             },
           },
         },
